@@ -4,7 +4,7 @@ import requests
 PATH_BRANCH_BINARY_PACKAGES = "https://rdb.altlinux.org/api/export/branch_binary_packages/{branch}"
 
 
-def get_from_branch_binary_packages(branch:str)->dict:
+def get_from_branch_binary_packages(branch:str)->list:
     try:
         url = PATH_BRANCH_BINARY_PACKAGES.format(branch=branch)
 
