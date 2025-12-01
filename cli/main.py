@@ -8,6 +8,9 @@ import src.branch_matching.compare as compare
 
 
 def echo_compact_table(result: dict) -> None:
+    """
+    Выводит пакеты в виде таблицы
+    """
     for arch, info in result.items():
         click.secho(f"\nАрхитектура: {arch}", fg="cyan", bold=True)
 
