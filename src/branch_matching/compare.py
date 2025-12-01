@@ -1,9 +1,14 @@
 from rpm_vercmp import vercmp
 
 
-def sort_by_architecture(branch: list[dict]):
+def sort_by_architecture(packages: list[dict]) -> dict[str, dict[str, dict]]:
+    """
+    Сортирует пакеты по видам архитектур
+    :param packages: Список словарей с пакетами
+    :return: Словарь вида { 'arch': { 'name': {package_data} } }
+    """
     packages_by_arch = {}
-    for package in branch:
+    for package in packages:
         arch = package['arch']
         name = package['name']
         if arch not in packages_by_arch:
@@ -13,6 +18,16 @@ def sort_by_architecture(branch: list[dict]):
 
 
 def evr_greater(e1, v1, r1, e2, v2, r2) -> bool:
+    """
+    Определяет новей ли версия 1
+    :param e1: Epoch первой версии (может быть None, str или int)
+    :param v1: Version первой версии
+    :param r1: Release первой версии
+    :param e2: Epoch второй версии
+    :param v2: Version второй версии
+    :param r2: Release второй версии
+    :return: True, если версия 1 новее, иначе False
+    """
     e1 = e1 or "0"
     e2 = e2 or "0"
     s1 = f"{e1}:{v1}-{r1}"
@@ -20,13 +35,24 @@ def evr_greater(e1, v1, r1, e2, v2, r2) -> bool:
     return vercmp(s1, s2) > 0
 
 
-def compare_packages(branch1: dict, branch2: dict) -> dict:
-    all_arches = set(branch1.keys()) | set(branch2.keys())
+def compare_packages(
+    sort_data1: dict[str, dict[str, dict]],
+    sort_data2: dict[str, dict[str, dict]]
+) -> dict[str, dict[str, list[str]]]:
+    """
+    Сравнивает пакеты двух веток.
+
+    :param sort_data1: Структура {arch: {pkg_name: pkg_dict}}
+    :param sort_data2: Структура {arch: {pkg_name: pkg_dict}}
+    :return: Структура {arch: {'only_branch1': [names], ...}}
+    """
+
+    all_arches = set(sort_data1.keys()) | set(sort_data2.keys())
     comparison_result = {}
 
     for arch in all_arches:
-        packages1 = branch1.get(arch, {})
-        packages2 = branch2.get(arch, {})
+        packages1 = sort_data1.get(arch, {})
+        packages2 = sort_data2.get(arch, {})
 
         set1 = set(packages1.keys())
         set2 = set(packages2.keys())

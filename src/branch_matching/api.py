@@ -7,6 +7,12 @@ PATH_BRANCH_BINARY_PACKAGES = "https://rdb.altlinux.org/api/export/branch_binary
 
 
 def get_from_branch_binary_packages(branch:str)->list:
+    """
+    Возвращает список пакетов ветки
+    :param branch: имя ветки
+    :return: список пакетов тетки
+    """
+
     try:
         url = PATH_BRANCH_BINARY_PACKAGES.format(branch=branch)
 
