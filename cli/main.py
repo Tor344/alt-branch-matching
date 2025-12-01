@@ -3,6 +3,7 @@ from math import ceil
 import click
 from tabulate import tabulate
 
+from src.branch_matching.log import logger
 import src.branch_matching.api as api
 import src.branch_matching.compare as compare
 
@@ -34,13 +35,22 @@ def echo_compact_table(result: dict) -> None:
 @click.argument("branch1")
 @click.argument("branch2")
 def cli(branch1, branch2):
+    logger.info("Первый запрос к beck-end")
     packages1 = compare.sort_by_architecture(api.get_from_branch_binary_packages(branch1))
+    echo_compact_table(packages1)
+    if packages1 == []:
+        click.echo("Произошла ошибка. Данные небыли получены")
+        return 0
+
+    logger.info("Второй запрос к beck-end")
     packages2 = compare.sort_by_architecture(api.get_from_branch_binary_packages(branch2))
+    if packages2 == []:
+        click.info("Данные небыли получены")
+        return 0
 
     result = compare.compare_packages(packages1, packages2)
 
     echo_compact_table(result)
-    return result
 
 
 if __name__ == "__main__":

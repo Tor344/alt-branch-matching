@@ -1,5 +1,7 @@
 import requests
-import click
+
+from src.branch_matching.log import logger
+
 
 PATH_BRANCH_BINARY_PACKAGES = "https://rdb.altlinux.org/api/export/branch_binary_packages/{branch}"
 
@@ -15,5 +17,5 @@ def get_from_branch_binary_packages(branch:str)->list:
         return data.get("packages")
 
     except requests.exceptions.RequestException as e:
-        click.echo(f"Произошла ошибка {e}")
+        logger.error(f"Произошла ошибка {e}")
         return []
