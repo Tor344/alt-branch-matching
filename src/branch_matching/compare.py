@@ -1,4 +1,4 @@
-from rpm_vercmp import vercmp
+from src.branch_matching.definition_version import vercmp
 
 
 def sort_by_architecture(packages: list[dict]) -> dict[str, dict[str, dict]]:
