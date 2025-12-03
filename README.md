@@ -14,7 +14,7 @@ Alt Branch Matching is a command-line tool designed for comparing package versio
 ## Podman
 1.  `git clone https://github.com/Tor344/alt-branch-matching.git`
 2.  `cd alt-branch-matching`
-3.  `podman run --rm -it alt-branch-matching`
+3.  `podman build -f container/Containerfile -t alt-branch-matching .`
 4.  `podman run --rm -it alt-branch-matching  your_branch1 your_branch2`
 
 ## ALT linux 
